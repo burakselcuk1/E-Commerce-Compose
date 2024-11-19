@@ -19,7 +19,7 @@ class MainViewModel @Inject constructor(
     val products: State<List<Product>> = _products
 
     init {
-        fetchProducts("QuadrupleBanner")
+        fetchProducts("61dbf39bc544de28dbd4a22f")
     }
 
     private fun fetchProducts(categoryId: String) {
