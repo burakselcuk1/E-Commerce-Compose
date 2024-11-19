@@ -9,10 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
 
@@ -31,18 +32,39 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainScreen() {
     var selectedTab by remember { mutableStateOf(0) }
-    val tabs = listOf("Anasayfa", "Kategori", "Favoriler", "Sepetim", "Hesabım")
+
+    val tabs = listOf(
+        "Anasayfa" to Icons.Default.Home,
+        "Kategori" to Icons.Default.List,
+        "Favoriler" to Icons.Default.Favorite,
+        "Sepetim" to Icons.Default.ShoppingCart,
+        "Hesabım" to Icons.Default.Person
+    )
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            BottomNavigation {
+            BottomNavigation(
+                backgroundColor = Color.LightGray
+            ) {
                 tabs.forEachIndexed { index, tab ->
                     BottomNavigationItem(
                         selected = selectedTab == index,
                         onClick = { selectedTab = index },
-                        icon = { Icon(Icons.Filled.Home, contentDescription = tab) },
-                        label = { Text(tab) }
+                        icon = {
+                            Icon(
+                                imageVector = tab.second,
+                                contentDescription = tab.first
+                            )
+                        },
+                        label = {
+                            Text(
+                                tab.first,
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        },
+                        selectedContentColor = Color.White,
+                        unselectedContentColor = Color.LightGray
                     )
                 }
             }
