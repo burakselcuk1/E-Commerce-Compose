@@ -17,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.e_commerce_compose.screens.categoryScreen.CategoryScreen
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -87,11 +88,6 @@ fun MainScreen() {
     }
 }
 
-
-@Composable
-fun CategoryScreen(modifier: Modifier) {
-    Text("Kategori", modifier = modifier)
-}
 
 @Composable
 fun FavoritesScreen(modifier: Modifier) {
