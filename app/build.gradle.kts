@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.hilt)
+    // alias(libs.plugins.kotlin.kapt)
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -66,4 +69,29 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.retrofitt)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.coil.compose)
+
+    // DataStore
+    implementation(libs.datastore.preferences)
+
+    // Material
+    implementation(libs.androidx.material)
+    implementation(libs.lifecycle.viewmodel.compose)
 }
