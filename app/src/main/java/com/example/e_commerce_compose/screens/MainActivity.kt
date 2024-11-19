@@ -18,7 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,8 +78,8 @@ fun MainScreen() {
         }
     ) { innerPadding ->
         when (selectedTab) {
-            0 -> com.example.e_commerce_compose.screens.mainScreen.MainScreen(Modifier.padding(innerPadding))
-            1 -> CategoryScreen(Modifier.padding(innerPadding))
+            0 -> CategoryScreen(Modifier.padding(innerPadding))
+            1 -> com.example.e_commerce_compose.screens.mainScreen.MainScreen(Modifier.padding(innerPadding))
             2 -> FavoritesScreen(Modifier.padding(innerPadding))
             3 -> CartScreen(Modifier.padding(innerPadding))
             4 -> AccountScreen(Modifier.padding(innerPadding))

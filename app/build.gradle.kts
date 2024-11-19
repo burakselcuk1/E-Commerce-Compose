@@ -25,7 +25,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://hcapi.sch.awstest.hebiar.com/debug\"")
+            buildConfigField("String", "BASE_URL", "\"https://hcapi.sch.awstest.hebiar.com/\"")
         }
         release {
             isMinifyEnabled = false
