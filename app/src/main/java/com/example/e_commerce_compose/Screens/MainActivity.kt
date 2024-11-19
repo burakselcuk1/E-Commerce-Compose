@@ -1,11 +1,13 @@
-package com.example.e_commerce_compose
+package com.example.e_commerce_compose.Screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.icons.Icons
@@ -42,10 +44,13 @@ fun MainScreen() {
     )
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding(),
         bottomBar = {
             BottomNavigation(
-                backgroundColor = Color.LightGray
+                backgroundColor = Color.LightGray,
+                modifier = Modifier.navigationBarsPadding()
             ) {
                 tabs.forEachIndexed { index, tab ->
                     BottomNavigationItem(
