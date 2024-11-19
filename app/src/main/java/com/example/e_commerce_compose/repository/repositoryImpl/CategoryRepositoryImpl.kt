@@ -12,15 +12,18 @@ class CategoryRepositoryImpl(
     private val graphQLService: GraphQLService
 ) : CategoryRepository {
     override suspend fun getCategories(): List<Category> {
-        val query = """ 
-        query GetCategories { 
-            categories { 
-                id 
-                name 
-            } 
-        } 
-    """.trimIndent()
-
+        val query = """
+        query FetchCategoriesQuery {
+            menuByType(type: "Main Menu") {
+                id
+                name
+                icon
+                menuId
+                parentMenuId
+                type
+            }
+        }
+        """.trimIndent()
 
         val request = GraphQLRequest(query = query, variables = null)
         val response = graphQLService.executeQuery<List<Category>>(request)
