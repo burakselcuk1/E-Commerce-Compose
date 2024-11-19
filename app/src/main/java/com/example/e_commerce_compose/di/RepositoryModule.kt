@@ -1,8 +1,11 @@
 package com.example.e_commerce_compose.di
 
 import com.example.e_commerce_compose.network.service.GraphQLService
+import com.example.e_commerce_compose.repository.CategoryRepository
 import com.example.e_commerce_compose.repository.ProductRepository
+import com.example.e_commerce_compose.repository.repositoryImpl.CategoryRepositoryImpl
 import com.example.e_commerce_compose.repository.repositoryImpl.ProductRepositoryImpl
+import com.example.e_commerce_compose.screens.categoryScreen.CategoriesUseCase
 import com.example.e_commerce_compose.screens.mainScreen.MainScreenUseCase
 import dagger.Module
 import dagger.Provides
@@ -31,9 +34,25 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideCategoriRepository(
+        graphQLService: GraphQLService
+    ): CategoryRepository {
+        return CategoryRepositoryImpl(graphQLService)
+    }
+
+    @Provides
+    @Singleton
     fun provideGetProductsByCategoryUseCase(
         repository: ProductRepository
     ): MainScreenUseCase {
         return MainScreenUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCategoryUseCase(
+        repository: CategoryRepository
+    ): CategoriesUseCase {
+        return CategoriesUseCase(repository)
     }
 }

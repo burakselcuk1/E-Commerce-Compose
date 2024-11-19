@@ -23,7 +23,9 @@ data class Product(
 )
 
 data class Category(
-    val name: String
+    val id: String,
+    val name: String,
+    val children: List<Category>? = null
 )
 
 data class Price(
