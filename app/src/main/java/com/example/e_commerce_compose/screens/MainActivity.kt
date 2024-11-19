@@ -1,4 +1,4 @@
-package com.example.e_commerce_compose.Screens
+package com.example.e_commerce_compose.screens
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -76,7 +76,7 @@ fun MainScreen() {
         }
     ) { innerPadding ->
         when (selectedTab) {
-            0 -> HomeScreen(Modifier.padding(innerPadding))
+            0 -> com.example.e_commerce_compose.screens.mainScreen.MainScreen(Modifier.padding(innerPadding))
             1 -> CategoryScreen(Modifier.padding(innerPadding))
             2 -> FavoritesScreen(Modifier.padding(innerPadding))
             3 -> CartScreen(Modifier.padding(innerPadding))
@@ -85,10 +85,6 @@ fun MainScreen() {
     }
 }
 
-@Composable
-fun HomeScreen(modifier: Modifier) {
-    Text("Anasayfa", modifier = modifier)
-}
 
 @Composable
 fun CategoryScreen(modifier: Modifier) {
