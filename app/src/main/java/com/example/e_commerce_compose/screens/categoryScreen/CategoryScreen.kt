@@ -83,7 +83,6 @@ fun CategoryScreen(
         }
     }
 }
-
 @Composable
 fun MainCategoryItem(
     categoryWithSubs: CategoryWithSubCategories,
@@ -99,7 +98,7 @@ fun MainCategoryItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onCategoryClick)
+                .clickable(onClick = if (categoryWithSubs.subcategories.isNotEmpty()) onCategoryClick else {{}})
                 .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -110,7 +109,8 @@ fun MainCategoryItem(
             ) {
                 // Ana kategori ikonu
                 if (categoryWithSubs.category.icon.isNotEmpty() &&
-                    !categoryWithSubs.category.icon.startsWith("SubList")) {
+                    !categoryWithSubs.category.icon.startsWith("SubList")
+                ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("${"hcapi.sch.awstest.hebiar.com/images"}/${categoryWithSubs.category.icon}")
@@ -126,58 +126,60 @@ fun MainCategoryItem(
                 Text(text = categoryWithSubs.category.name)
             }
 
-            Icon(
-                imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp
-                else Icons.Default.KeyboardArrowDown,
-                contentDescription = if (isExpanded) "Daralt" else "Genişlet",
-                tint = MaterialTheme.colorScheme.primary
-            )
+            // Sadece alt kategorisi varsa ok göster
+            if (categoryWithSubs.subcategories.isNotEmpty()) {
+                Icon(
+                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp
+                    else Icons.Default.KeyboardArrowDown,
+                    contentDescription = if (isExpanded) "Daralt" else "Genişlet",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
         }
 
-        // Alt kategoriler
-        AnimatedVisibility(
-            visible = isExpanded,
-            enter = expandVertically() + fadeIn(),
-            exit = shrinkVertically() + fadeOut()
-        ) {
-            Column(
-                modifier = Modifier.padding(start = 32.dp)
+        // Alt kategoriler (eğer varsa)
+        if (categoryWithSubs.subcategories.isNotEmpty()) {
+            AnimatedVisibility(
+                visible = isExpanded,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut()
             ) {
-                // Her bir alt kategori listesi için
-                categoryWithSubs.subcategories.forEach { subCategory ->
-                    // Alt kategorilerin başlığı (eğer gerekiyorsa)
-                    if (subCategory.items.isNotEmpty()) {
-                        Text(
-                            text = subCategory.list.name,
-                            style = MaterialTheme.typography.titleSmall,
-                            modifier = Modifier.padding(vertical = 8.dp)
-                        )
+                Column(
+                    modifier = Modifier.padding(start = 32.dp)
+                ) {
+                    categoryWithSubs.subcategories.forEach { subCategory ->
+                        if (subCategory.items.isNotEmpty()) {
+                            Text(
+                                text = subCategory.list.name,
+                                style = MaterialTheme.typography.titleSmall,
+                                modifier = Modifier.padding(vertical = 8.dp)
+                            )
 
-                        // Alt kategori öğeleri
-                        subCategory.items.forEach { item ->
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable { /* Alt kategori tıklama işlemi */ }
-                                    .padding(vertical = 8.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Text(
-                                    text = item.name,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                                Icon(
-                                    imageVector = Icons.Default.KeyboardArrowRight,
-                                    contentDescription = "İlerle",
-                                    tint = MaterialTheme.colorScheme.primary
-                                )
-                            }
-                            if (item != subCategory.items.last()) {
-                                Divider(
-                                    modifier = Modifier.padding(vertical = 4.dp),
-                                    color = MaterialTheme.colorScheme.surfaceVariant
-                                )
+                            subCategory.items.forEach { item ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clickable { /* Alt kategori tıklama işlemi */ }
+                                        .padding(vertical = 8.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = item.name,
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                    Icon(
+                                        imageVector = Icons.Default.KeyboardArrowRight,
+                                        contentDescription = "İlerle",
+                                        tint = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                                if (item != subCategory.items.last()) {
+                                    Divider(
+                                        modifier = Modifier.padding(vertical = 4.dp),
+                                        color = MaterialTheme.colorScheme.surfaceVariant
+                                    )
+                                }
                             }
                         }
                     }
