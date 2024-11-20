@@ -14,33 +14,87 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.example.GetCategoriesQuery
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val apolloClient: ApolloClient
 ) : ViewModel() {
-    private val _categories = MutableStateFlow<List<MenuCategory>>(emptyList())
-    val categories: StateFlow<List<MenuCategory>> = _categories.asStateFlow()
+    private val _categories = MutableStateFlow<List<CategoryWithSubCategories>>(emptyList())
+    val categories: StateFlow<List<CategoryWithSubCategories>> = _categories.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _expandedCategoryId = MutableStateFlow<Int?>(null)
+    val expandedCategoryId: StateFlow<Int?> = _expandedCategoryId.asStateFlow()
+
+    fun onCategoryClick(categoryId: Int) {
+        _expandedCategoryId.value = if (_expandedCategoryId.value == categoryId) null else categoryId
+    }
 
     fun fetchCategories() {
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val response = apolloClient.query(GetCategoriesQuery()).execute()
-                val menuItems = response.data?.menuByType?.mapNotNull { item ->
-                    MenuCategory(
-                        id = (item?.id ?: "").toString(),
-                        name = item?.name ?: "",
-                        icon = item?.icon ?: "",
-                        menuId = (item?.menuId ?: "").toString(),
-                        parentMenuId = (item?.parentMenuId ?: "").toString(),
-                        type = item?.type ?: ""
+                val menuItems = response.data?.menuByType?.filterNotNull() ?: emptyList()
+
+                // Ana kategorileri filtrele
+                val mainCategories = menuItems.filter {
+                    it.parentMenuId == null && it.type != "NoSubCategory"
+                }
+
+                // Her ana kategori için alt kategorileri organize et
+                val categoriesWithSubs = mainCategories.map { mainCategory ->
+                    // Alt kategori listelerini bul (type = "List" olanlar)
+                    val subLists = menuItems.filter {
+                        it.parentMenuId == mainCategory.id && it.type == "List"
+                    }
+
+                    // Her bir liste için alt öğeleri bul
+                    val subCategories = subLists.map { list ->
+                        SubCategory(
+                            list = MenuCategory(
+                                id = list.id,
+                                name = list.name ?: "",
+                                icon = list.icon ?: "",
+                                menuId = list.menuId ?: 0,
+                                parentMenuId = list.parentMenuId,
+                                type = list.type ?: ""
+                            ),
+                            items = menuItems.filter {
+                                it.parentMenuId == list.id
+                            }.map { item ->
+                                MenuCategory(
+                                    id = item.id,
+                                    name = item.name ?: "",
+                                    icon = item.icon ?: "",
+                                    menuId = item.menuId ?: 0,
+                                    parentMenuId = item.parentMenuId,
+                                    type = item.type ?: ""
+                                )
+                            }
+                        )
+                    }
+
+                    CategoryWithSubCategories(
+                        category = MenuCategory(
+                            id = mainCategory.id,
+                            name = mainCategory.name ?: "",
+                            icon = mainCategory.icon ?: "",
+                            menuId = mainCategory.menuId ?: 0,
+                            parentMenuId = mainCategory.parentMenuId,
+                            type = mainCategory.type ?: ""
+                        ),
+                        subcategories = subCategories
                     )
-                } ?: emptyList()
-                _categories.value = menuItems
+                }
+
+                _categories.value = categoriesWithSubs
             } catch (e: Exception) {
                 Log.e("CategoryViewModel", "Error fetching categories", e)
                 _categories.value = emptyList()
@@ -51,12 +105,21 @@ class CategoryViewModel @Inject constructor(
     }
 }
 
-// Data class for categories
+data class CategoryWithSubCategories(
+    val category: MenuCategory,
+    val subcategories: List<SubCategory>
+)
+
+data class SubCategory(
+    val list: MenuCategory,
+    val items: List<MenuCategory>
+)
+
 data class MenuCategory(
-    val id: String,
+    val id: Int,
     val name: String,
     val icon: String,
-    val menuId: String,
-    val parentMenuId: String,
+    val menuId: Int,
+    val parentMenuId: Int?,
     val type: String
 )
