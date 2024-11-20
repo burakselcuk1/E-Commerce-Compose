@@ -109,7 +109,7 @@ fun MainCategoryItem(
                     !categoryWithSubs.category.icon.startsWith("SubList")) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("${"Constants.BASE_URL"}/${categoryWithSubs.category.icon}")
+                            .data("${"hcapi.sch.awstest.hebiar.com/images"}/${categoryWithSubs.category.icon}")
                             .crossfade(true)
                             .build(),
                         contentDescription = categoryWithSubs.category.name,
