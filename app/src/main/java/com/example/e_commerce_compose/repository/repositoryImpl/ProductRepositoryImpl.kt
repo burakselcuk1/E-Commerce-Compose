@@ -52,9 +52,10 @@ class ProductRepositoryImpl(
         )
         val request = GraphQLRequest(query = query, variables = variables)
 
-        val response = graphQLService.executeQuery<ProductResponse>(request)
-        Log.d("GraphQLBurakReis", response.toString())
+       // val response = graphQLService.executeQuery<ProductResponse>(request)
+        //Log.d("GraphQLBurakReis", response.toString())
 
-        return response.data?.categoryV2?.data?.products ?: emptyList()
+       // return response.data?.categoryV2?.data?.products ?: emptyList()
+        return emptyList()
     }
 }

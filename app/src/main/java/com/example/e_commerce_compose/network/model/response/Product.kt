@@ -25,7 +25,11 @@ data class Product(
 data class Category(
     val id: String,
     val name: String,
-    val children: List<Category>? = null
+    val icon: String?,
+    val menuId: String?,
+    val parentMenuId: String?,
+    val type: String?,
+    val children: List<Category>? = null // Eğer alt kategoriler varsa
 )
 
 data class Price(

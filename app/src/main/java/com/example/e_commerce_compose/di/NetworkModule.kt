@@ -4,6 +4,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import android.content.Context
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.network.okHttpClient
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
@@ -27,6 +29,15 @@ object NetworkModule {
                     .build()
                 chain.proceed(request)
             }
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideApolloClient(okHttpClient: OkHttpClient): ApolloClient {
+        return ApolloClient.Builder()
+            .serverUrl(BuildConfig.BASE_URL) // GraphQL endpoint
+            .okHttpClient(okHttpClient)
             .build()
     }
 

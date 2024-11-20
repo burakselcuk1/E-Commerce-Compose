@@ -3,7 +3,16 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     // alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.apollo)
     id("org.jetbrains.kotlin.kapt")
+}
+apollo {
+    service("service") {
+        packageName.set("com.example")
+        schemaFile.set(file("src/main/graphql/com/example/schema.graphqls"))
+        generateKotlinModels.set(true)
+        srcDir("src/main/graphql")
+    }
 }
 
 android {
@@ -23,9 +32,10 @@ android {
         }
     }
 
+
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://hcapi.sch.awstest.hebiar.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://hcapi.sch.awstest.hebiar.com/graphql\"")
         }
         release {
             isMinifyEnabled = false
@@ -33,7 +43,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://hcapi.sch.awstest.hebiar.com/\"")
+            buildConfigField("String", "BASE_URL", "\"https://hcapi.sch.awstest.hebiar.com/graphql\"")
         }
     }
 
@@ -100,4 +110,8 @@ dependencies {
     // Material
     implementation(libs.androidx.material)
     implementation(libs.lifecycle.viewmodel.compose)
+
+    // Apollo
+    implementation(libs.apollo.runtime)
+    implementation(libs.apollo.normalized.cache)
 }

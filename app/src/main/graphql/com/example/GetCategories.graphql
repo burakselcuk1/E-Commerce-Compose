@@ -1,0 +1,10 @@
+query GetCategories {
+    menuByType(type: "Main Menu") {
+        id
+        name
+        icon
+        menuId
+        parentMenuId
+        type
+    }
+}

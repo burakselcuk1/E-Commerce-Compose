@@ -8,6 +8,6 @@ import retrofit2.http.POST
 
 interface GraphQLService {
         @POST("graphql")
-        suspend fun <T> executeQuery(@Body request: GraphQLRequest): GraphQLResponse<T>
+        suspend fun executeQuery(@Body request: GraphQLRequest): Map<String, Any>
     }
 

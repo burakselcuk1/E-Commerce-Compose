@@ -10,6 +10,9 @@ data class GraphQLError(
     val locations: List<Location>?,
     val path: List<String>?
 )
+data class MenuByTypeResponse(
+    val menuByType: List<Category>
+)
 
 data class Location(
     val line: Int,
