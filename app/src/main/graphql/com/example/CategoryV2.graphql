@@ -1,0 +1,21 @@
+query CategoryV2($categoryId: String, $command: CatalogPagingFilteringTypeInput) {
+    categoryV2(categoryId: $categoryId, command: $command) {
+        data {
+            products {
+                id
+                name
+                price {
+                    priceValue
+                }
+                defaultPictureModel {
+                    imageUrl
+                }
+            }
+            pagingFilteringContext {
+                totalPages
+                pageNumber
+                hasNextPage
+            }
+        }
+    }
+}

@@ -17,9 +17,26 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.e_commerce_compose.screens.productScreen.ProductScreen
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
+
+// Bottom Navigation Items
+sealed class BottomNavItem(val route: String, val title: String, val icon: ImageVector) {
+    object Home : BottomNavItem("home", "Anasayfa", Icons.Default.Home)
+    object Category : BottomNavItem("category", "Kategori", Icons.Default.List)
+    object Favorites : BottomNavItem("favorites", "Favoriler", Icons.Default.Favorite)
+    object Cart : BottomNavItem("cart", "Sepetim", Icons.Default.ShoppingCart)
+    object Account : BottomNavItem("account", "Hesabım", Icons.Default.Person)
+}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -36,14 +53,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen() {
+    val navController = rememberNavController()
     var selectedTab by remember { mutableStateOf(0) }
 
-    val tabs = listOf(
-        "Anasayfa" to Icons.Default.Home,
-        "Kategori" to Icons.Default.List,
-        "Favoriler" to Icons.Default.Favorite,
-        "Sepetim" to Icons.Default.ShoppingCart,
-        "Hesabım" to Icons.Default.Person
+    val bottomNavItems = listOf(
+        BottomNavItem.Home,
+        BottomNavItem.Category,
+        BottomNavItem.Favorites,
+        BottomNavItem.Cart,
+        BottomNavItem.Account
     )
 
     Scaffold(
@@ -51,43 +69,97 @@ fun MainScreen() {
             .fillMaxSize()
             .systemBarsPadding(),
         bottomBar = {
-            BottomNavigation(
-                backgroundColor = Color.LightGray,
-                modifier = Modifier.navigationBarsPadding()
-            ) {
-                tabs.forEachIndexed { index, tab ->
-                    BottomNavigationItem(
-                        selected = selectedTab == index,
-                        onClick = { selectedTab = index },
-                        icon = {
-                            Icon(
-                                imageVector = tab.second,
-                                contentDescription = tab.first
-                            )
-                        },
-                        label = {
-                            Text(
-                                tab.first,
-                                style = MaterialTheme.typography.labelSmall
-                            )
-                        },
-                        selectedContentColor = Color.White,
-                        unselectedContentColor = Color.LightGray
-                    )
+            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+            val showBottomNav = bottomNavItems.any { it.route == currentRoute }
+
+            if (showBottomNav) {
+                BottomNavigation(
+                    backgroundColor = MaterialTheme.colorScheme.surface,
+                    modifier = Modifier.navigationBarsPadding()
+                ) {
+                    bottomNavItems.forEachIndexed { index, item ->
+                        BottomNavigationItem(
+                            selected = selectedTab == index,
+                            onClick = {
+                                selectedTab = index
+                                navController.navigate(item.route) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = item.icon,
+                                    contentDescription = item.title
+                                )
+                            },
+                            label = {
+                                Text(
+                                    item.title,
+                                    style = MaterialTheme.typography.labelSmall
+                                )
+                            },
+                            selectedContentColor = MaterialTheme.colorScheme.primary,
+                            unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                        )
+                    }
                 }
             }
         }
     ) { innerPadding ->
-        when (selectedTab) {
-            0 -> FavoritesScreen(Modifier.padding(innerPadding))
-            1 -> com.example.e_commerce_compose.screens.mainScreen.MainScreen(Modifier.padding(innerPadding))
-            2 -> CategoryScreen(Modifier.padding(innerPadding))
-            3 -> CartScreen(Modifier.padding(innerPadding))
-            4 -> AccountScreen(Modifier.padding(innerPadding))
+        NavHost(
+            navController = navController,
+            startDestination = BottomNavItem.Home.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(BottomNavItem.Home.route) {
+                HomeScreen(Modifier)
+            }
+
+            composable(BottomNavItem.Category.route) {
+                CategoryScreen(
+                    modifier = Modifier,
+                    onCategoryClick = { categoryId ->
+                        navController.navigate("products/$categoryId")
+                    }
+                )
+            }
+
+            composable(BottomNavItem.Favorites.route) {
+                FavoritesScreen(Modifier)
+            }
+
+            composable(BottomNavItem.Cart.route) {
+                CartScreen(Modifier)
+            }
+
+            composable(BottomNavItem.Account.route) {
+                AccountScreen(Modifier)
+            }
+
+            composable(
+                route = "products/{categoryId}",
+                arguments = listOf(
+                    navArgument("categoryId") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val categoryId = backStackEntry.arguments?.getString("categoryId") ?: return@composable
+                ProductScreen(
+                    categoryId = categoryId,
+                    onBackClick = { navController.navigateUp() }
+                )
+            }
         }
     }
 }
 
+@Composable
+fun HomeScreen(modifier: Modifier) {
+    Text("Anasayfa", modifier = modifier)
+}
 
 @Composable
 fun FavoritesScreen(modifier: Modifier) {

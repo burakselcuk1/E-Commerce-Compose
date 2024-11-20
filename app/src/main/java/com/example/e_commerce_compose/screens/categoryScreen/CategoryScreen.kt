@@ -41,7 +41,9 @@ import com.example.e_commerce_compose.screens.categoryScreen.MenuCategory
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
-    viewModel: CategoryViewModel = hiltViewModel()
+    viewModel: CategoryViewModel = hiltViewModel(),
+    onCategoryClick: (String) -> Unit
+
 ) {
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -72,7 +74,9 @@ fun CategoryScreen(
                     MainCategoryItem(
                         categoryWithSubs = categoryWithSubs,
                         isExpanded = categoryWithSubs.category.id == expandedCategoryId,
-                        onCategoryClick = { viewModel.onCategoryClick(categoryWithSubs.category.id) }
+                        onCategoryClick = { viewModel.onCategoryClick(categoryWithSubs.category.id)
+                            onCategoryClick(categoryWithSubs.category.id.toString())
+                        }
                     )
                 }
             }
