@@ -47,6 +47,7 @@ class ProductViewModel @Inject constructor(
                         command = Optional.present(catalogPagingInput)
                     )
                 ).execute()
+                Log.d("burakreis12",response.data.toString())
 
                 val productData = response.data?.categoryV2?.data?.products ?: emptyList()
 

@@ -37,13 +37,11 @@ import com.example.e_commerce_compose.screens.categoryScreen.CategoryViewModel
 import com.example.e_commerce_compose.screens.categoryScreen.CategoryWithSubCategories
 import com.example.e_commerce_compose.screens.categoryScreen.MenuCategory
 
-
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
     viewModel: CategoryViewModel = hiltViewModel(),
     onCategoryClick: (String) -> Unit
-
 ) {
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -74,9 +72,10 @@ fun CategoryScreen(
                     MainCategoryItem(
                         categoryWithSubs = categoryWithSubs,
                         isExpanded = categoryWithSubs.category.id == expandedCategoryId,
-                        onCategoryClick = { viewModel.onCategoryClick(categoryWithSubs.category.id)
+                        onCategoryClick = {
                             onCategoryClick(categoryWithSubs.category.id.toString())
-                        }
+                        },
+                        viewModel = viewModel // ViewModel'i gönderiyoruz
                     )
                 }
             }
@@ -87,7 +86,8 @@ fun CategoryScreen(
 fun MainCategoryItem(
     categoryWithSubs: CategoryWithSubCategories,
     isExpanded: Boolean,
-    onCategoryClick: () -> Unit
+    onCategoryClick: () -> Unit,
+    viewModel: CategoryViewModel
 ) {
     Column(
         modifier = Modifier
@@ -98,7 +98,15 @@ fun MainCategoryItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = if (categoryWithSubs.subcategories.isNotEmpty()) onCategoryClick else {{}})
+                .clickable {
+                    if (categoryWithSubs.subcategories.isEmpty()) {
+                        // Alt kategorisi yoksa ürünlere git
+                        onCategoryClick()
+                    } else {
+                        // Alt kategorisi varsa açılır menüyü kontrol et
+                        viewModel.onCategoryClick(categoryWithSubs.category.id)
+                    }
+                }
                 .padding(vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -107,7 +115,6 @@ fun MainCategoryItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                // Ana kategori ikonu
                 if (categoryWithSubs.category.icon.isNotEmpty() &&
                     !categoryWithSubs.category.icon.startsWith("SubList")
                 ) {
@@ -126,18 +133,15 @@ fun MainCategoryItem(
                 Text(text = categoryWithSubs.category.name)
             }
 
-            // Sadece alt kategorisi varsa ok göster
             if (categoryWithSubs.subcategories.isNotEmpty()) {
                 Icon(
-                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp
-                    else Icons.Default.KeyboardArrowDown,
+                    imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = if (isExpanded) "Daralt" else "Genişlet",
                     tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
 
-        // Alt kategoriler (eğer varsa)
         if (categoryWithSubs.subcategories.isNotEmpty()) {
             AnimatedVisibility(
                 visible = isExpanded,
@@ -159,7 +163,7 @@ fun MainCategoryItem(
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clickable { /* Alt kategori tıklama işlemi */ }
+                                        .clickable { onCategoryClick() }
                                         .padding(vertical = 8.dp),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
