@@ -1,20 +1,52 @@
-query CategoryV2($categoryId: String, $command: CatalogPagingFilteringTypeInput) {
-    categoryV2(categoryId: $categoryId, command: $command) {
+query CategoryV2($categoryId: String!, $pageSize: Int!, $pageNumber: Int!) {
+    categoryV2(
+        categoryId: $categoryId,
+        command: {
+            orderBy: 0,
+            pageNumber: $pageNumber,
+            pageSize: $pageSize,
+            prepareSpecsFilters: true,
+            pagePath: "https://hcapi.sch.awstest.hebiar.com/graphql/categoryv2?categoryId=$categoryId&includeDocuments=true&includeFacets=true",
+            selectedSpecFilter: []
+        }
+    ) {
+        isSuccess
         data {
-            products {
+            id
+            name
+            metaKeywords
+            metaDescription
+            metaTitle
+            seName
+            flag
+            icon
+            subCategories {
                 id
                 name
-                price {
-                    priceValue
-                }
-                defaultPictureModel {
+                icon
+                pictureModel {
                     imageUrl
                 }
             }
-            pagingFilteringContext {
-                totalPages
-                pageNumber
-                hasNextPage
+            products {
+                id
+                name
+                seName
+                pictures {
+                    type
+                    imageUrl
+                    videoUrl
+                }
+                specificationAttributeModels {
+                    specificationAttributeName
+                    colorSquaresRgb
+                    valueRaw
+                }
+            }
+            fasedSeoList {
+                id
+                seName
+                aLink
             }
         }
     }

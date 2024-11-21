@@ -31,15 +31,27 @@ object NetworkModule {
             }
             .build()
     }
-
     @Provides
     @Singleton
-    fun provideApolloClient(okHttpClient: OkHttpClient): ApolloClient {
+    fun provideApolloClient(): ApolloClient {
+        val okHttpClient = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val request = chain.request().newBuilder()
+                    .addHeader("culture", "tr-TR")
+                    .addHeader("app-id", "com.example.e_commerce_compose.di")
+                    .addHeader("language", "tr")
+                    .addHeader("Content-Type", "application/json")
+                    .build()
+                chain.proceed(request)
+            }
+            .build()
+
         return ApolloClient.Builder()
             .serverUrl(BuildConfig.BASE_URL) // GraphQL endpoint
             .okHttpClient(okHttpClient)
             .build()
     }
+
 
     @Provides
     @Singleton

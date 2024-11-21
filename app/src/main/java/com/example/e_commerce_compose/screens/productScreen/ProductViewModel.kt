@@ -6,18 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.api.Optional
 import com.example.CategoryV2Query
-import com.example.type.PageSizeOptionTypeInput
-import com.example.type.PriceRangeFilterModelTypeInput
-import com.example.type.ProductSortingItemTypeInput
-import com.example.type.SpecificationFilterTypeInput
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.type.CatalogPagingFilteringTypeInput
-
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     private val apolloClient: ApolloClient
@@ -32,35 +26,30 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Apollo tarafından generate edilen CatalogPagingFilteringTypeInput kullanılıyor
-                val catalogPagingInput = CatalogPagingFilteringTypeInput(
-                    pageNumber = Optional.present(1),
-                    pageSize = Optional.present(10),
-                    orderBy = Optional.absent(),
-                    allowProductSorting = Optional.present(true),
-                    allowCustomersToSelectPageSize = Optional.present(false)
-                )
-
                 val response = apolloClient.query(
                     CategoryV2Query(
-                        categoryId = Optional.present(categoryId),
-                        command = Optional.present(catalogPagingInput)
+                        categoryId = "$categoryId",
+                        pageSize = 48,
+                        pageNumber = 1
                     )
                 ).execute()
-                Log.d("burakreis12",response.data.toString())
+
+                Log.d("ProductViewModel", "Raw Response: ${response.data}")
 
                 val productData = response.data?.categoryV2?.data?.products ?: emptyList()
 
-                _products.value = productData.map {
-                    Product(
-                        id = it?.id!!,
-                        name = it?.name ?: "",
-                        price = it?.price?.priceValue ?: 0.0,
-                        imageUrl = it?.defaultPictureModel?.imageUrl ?: ""
-                    )
+                _products.value = productData.mapNotNull { product ->
+                    product?.let {
+                        Product(
+                            id = it.id ?: "",
+                            name = it.name ?: "",
+                            price = 0.0, // Fiyat bilgisi sorguda olmadığı için sabit bir değer verdik
+                            imageUrl = it.pictures?.firstOrNull()?.imageUrl ?: ""
+                        )
+                    }
                 }
             } catch (e: Exception) {
-                Log.e("ProductViewModel", "Error fetching products", e)
+                Log.e("ProductViewModel", "Error: ${e.message}", e)
                 _products.value = emptyList()
             } finally {
                 _isLoading.value = false
@@ -72,6 +61,6 @@ class ProductViewModel @Inject constructor(
 data class Product(
     val id: String,
     val name: String,
-    val price: Any,
+    val price: Double, // Fiyat bilgisi sorguda olmadığından varsayılan değer kullanılacak
     val imageUrl: String
 )
