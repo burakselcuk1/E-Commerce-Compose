@@ -14,25 +14,45 @@ import javax.inject.Inject
 class ProductViewModel @Inject constructor(
     private val fetchProductsUseCase: ProductsUseCase
 ) : ViewModel() {
-
     private val _products = MutableStateFlow<List<ProductUiModel>>(emptyList())
     val products: StateFlow<List<ProductUiModel>> = _products.asStateFlow()
 
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    fun fetchProducts(categoryId: String) {
+    private var currentPage = 1
+    private var canLoadMore = true
+
+    fun fetchProducts(categoryId: String, isInitialLoad: Boolean = true) {
+        if (isInitialLoad) {
+            currentPage = 1
+            _products.value = emptyList()
+            canLoadMore = true
+        }
+
+        if (!canLoadMore || _isLoading.value) return
+
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                val products = fetchProductsUseCase(categoryId)
-                _products.value = products
+                val newProducts = fetchProductsUseCase(categoryId, currentPage)
+                if (newProducts.isEmpty()) {
+                    canLoadMore = false
+                } else {
+                    _products.value = if (isInitialLoad) {
+                        newProducts
+                    } else {
+                        _products.value + newProducts
+                    }
+                    currentPage++
+                }
             } catch (e: Exception) {
-                _products.value = emptyList()
+                if (isInitialLoad) {
+                    _products.value = emptyList()
+                }
             } finally {
                 _isLoading.value = false
             }
         }
     }
 }
-

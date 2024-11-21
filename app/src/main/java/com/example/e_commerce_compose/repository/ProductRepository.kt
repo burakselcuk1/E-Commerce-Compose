@@ -4,5 +4,5 @@ import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
 
 
 interface ProductRepository {
-    suspend fun fetchProducts(categoryId: String): List<ProductUiModel>
+    suspend fun fetchProducts(categoryId: String, page: Int): List<ProductUiModel>
 }

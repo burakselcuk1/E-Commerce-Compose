@@ -11,18 +11,16 @@ class ProductRepositoryImpl @Inject constructor(
     private val apolloClient: ApolloClient,
     private val uiMapper: ProductUiMapper
 ) : ProductRepository {
-
-    override suspend fun fetchProducts(categoryId: String): List<ProductUiModel> {
+    override suspend fun fetchProducts(categoryId: String, page: Int): List<ProductUiModel> {
         val response = apolloClient.query(
             CategoryV2Query(
                 categoryId = categoryId,
                 pageSize = 48,
-                pageNumber = 1
+                pageNumber = page
             )
         ).execute()
 
         val productData = response.data?.categoryV2?.data?.products ?: emptyList()
-
         return productData.mapNotNull { product ->
             product?.let {
                 uiMapper.mapToProduct(it)
@@ -30,4 +28,3 @@ class ProductRepositoryImpl @Inject constructor(
         }
     }
 }
-

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
@@ -54,10 +55,7 @@ fun ProductScreen(
                 title = { Text("Ürünler") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Geri"
-                        )
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Geri")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -71,20 +69,36 @@ fun ProductScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            } else {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)
-                ) {
-                    items(products) { product ->
-                        ProductCard(product = product) { productId ->
-                            onProductClick(productId)
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(products) { product ->
+                    ProductCard(product = product) { productId ->
+                        onProductClick(productId)
+                    }
+                }
+
+                item(span = { GridItemSpan(2) }) {
+                    if (isLoading) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
+
+                // Load more trigger
+                item(span = { GridItemSpan(2) }) {
+                    LaunchedEffect(products.size) {
+                        if (products.isNotEmpty() && !isLoading) {
+                            viewModel.fetchProducts(categoryId, isInitialLoad = false)
                         }
                     }
                 }

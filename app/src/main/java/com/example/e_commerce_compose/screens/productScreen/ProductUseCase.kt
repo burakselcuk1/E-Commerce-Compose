@@ -7,7 +7,7 @@ import javax.inject.Inject
 class ProductsUseCase @Inject constructor(
     private val repository: ProductRepository
 ) {
-    suspend operator fun invoke(categoryId: String): List<ProductUiModel> {
-        return repository.fetchProducts(categoryId)
+    suspend operator fun invoke(categoryId: String, page: Int): List<ProductUiModel> {
+        return repository.fetchProducts(categoryId, page)
     }
 }
