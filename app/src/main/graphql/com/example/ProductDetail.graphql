@@ -1,0 +1,27 @@
+query ProductDetail($productId: String!) {
+    product(id: $productId) {
+        id
+        name
+        seoDescription
+        fullDescription
+        shortDescription
+        isFreeShipping
+        productSlicers {
+            variants {
+                priceValue
+            }
+        }
+        productSpecifications {
+            specificationAttributeName
+            valueRaw
+        }
+        productReviewOverview {
+            allowCustomerReviews
+            ratingSum
+            totalReviews
+        }
+        pictureModels {
+            imageUrl
+        }
+    }
+}

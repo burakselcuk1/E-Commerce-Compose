@@ -1,6 +1,7 @@
 package com.example.e_commerce_compose.screens.productScreen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -31,12 +32,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.LaunchedEffect
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductScreen(
     categoryId: String,
     onBackClick: () -> Unit,
+    onProductClick: (String) -> Unit, // Product tıklandığında çağrılacak işlev
     viewModel: ProductViewModel = hiltViewModel()
 ) {
     LaunchedEffect(categoryId) {
@@ -49,8 +50,7 @@ fun ProductScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ürünler") }
-                ,
+                title = { Text("Ürünler") },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -82,7 +82,9 @@ fun ProductScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(products) { product ->
-                        ProductCard(product = product)
+                        ProductCard(product = product) { productId ->
+                            onProductClick(productId) // Ürün tıklanınca tetiklenir
+                        }
                     }
                 }
             }
@@ -91,10 +93,14 @@ fun ProductScreen(
 }
 
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(
+    product: Product,
+    onProductClick: (String) -> Unit
+) {
     Card(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onProductClick(product.id) },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -144,17 +150,9 @@ fun ProductCard(product: Product) {
                         style = MaterialTheme.typography.titleMedium,
                         color = MaterialTheme.colorScheme.primary
                     )
-
-                    product.price?.let {
-                        Text(
-                            text = "₺${String.format("%.2f", it)}",
-                            textDecoration = TextDecoration.LineThrough,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.outline
-                        )
-                    }
                 }
             }
         }
     }
 }
+

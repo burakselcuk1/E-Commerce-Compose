@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailScreen
 import com.example.e_commerce_compose.screens.productScreen.ProductScreen
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -128,6 +129,20 @@ fun MainScreen() {
                 )
             }
 
+            composable(
+                route = "productDetail/{productId}",
+                arguments = listOf(
+                    navArgument("productId") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val productId = backStackEntry.arguments?.getString("productId") ?: return@composable
+                ProductDetailScreen(
+                    productId = productId,
+                    onBackClick = { navController.navigateUp() }
+                )
+            }
+
+
             composable(BottomNavItem.Favorites.route) {
                 FavoritesScreen(Modifier)
             }
@@ -149,9 +164,13 @@ fun MainScreen() {
                 val categoryId = backStackEntry.arguments?.getString("categoryId") ?: return@composable
                 ProductScreen(
                     categoryId = categoryId,
-                    onBackClick = { navController.navigateUp() }
+                    onBackClick = { navController.navigateUp() },
+                    onProductClick = { productId ->
+                        navController.navigate("productDetail/$productId")
+                    }
                 )
             }
+
         }
     }
 }
