@@ -1,7 +1,8 @@
 package com.example.e_commerce_compose.repository
 
-import com.example.e_commerce_compose.network.model.response.Product
+import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
+
 
 interface ProductRepository {
-    suspend fun getProductsByCategory(categoryId: String): List<Product>
+    suspend fun fetchProducts(categoryId: String): List<ProductUiModel>
 }

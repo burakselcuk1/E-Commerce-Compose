@@ -19,10 +19,10 @@ class MainViewModel @Inject constructor(
     val products: State<List<Product>> = _products
 
     init {
-        fetchProducts("1.0")
+        //fetchProducts("1.0")
     }
 
-    private fun fetchProducts(categoryId: String) {
+   /* private fun fetchProducts(categoryId: String) {
         viewModelScope.launch {
             try {
                 val data = getProductsByCategoryUseCase(categoryId)
@@ -33,5 +33,5 @@ class MainViewModel @Inject constructor(
                 Log.e("GraphQL Error", "HTTP 400 Error: $errorBody")
             }
         }
-    }
+    }*/
 }

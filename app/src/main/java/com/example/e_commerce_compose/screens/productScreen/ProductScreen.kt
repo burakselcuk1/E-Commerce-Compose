@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,12 +31,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.LaunchedEffect
+import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductScreen(
     categoryId: String,
     onBackClick: () -> Unit,
-    onProductClick: (String) -> Unit, // Product tıklandığında çağrılacak işlev
+    onProductClick: (String) -> Unit,
     viewModel: ProductViewModel = hiltViewModel()
 ) {
     LaunchedEffect(categoryId) {
@@ -83,7 +84,7 @@ fun ProductScreen(
                 ) {
                     items(products) { product ->
                         ProductCard(product = product) { productId ->
-                            onProductClick(productId) // Ürün tıklanınca tetiklenir
+                            onProductClick(productId)
                         }
                     }
                 }
@@ -94,7 +95,7 @@ fun ProductScreen(
 
 @Composable
 fun ProductCard(
-    product: Product,
+    product: ProductUiModel,
     onProductClick: (String) -> Unit
 ) {
     Card(
