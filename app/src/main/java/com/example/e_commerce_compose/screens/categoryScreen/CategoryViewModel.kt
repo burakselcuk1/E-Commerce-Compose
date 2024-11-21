@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val apolloClient: ApolloClient
@@ -43,19 +42,15 @@ class CategoryViewModel @Inject constructor(
                 val response = apolloClient.query(GetCategoriesQuery()).execute()
                 val menuItems = response.data?.menuByType?.filterNotNull() ?: emptyList()
 
-                // Ana kategorileri filtrele
                 val mainCategories = menuItems.filter {
                     it.parentMenuId == null && it.type != "NoSubCategory"
                 }
 
-                // Her ana kategori için alt kategorileri organize et
                 val categoriesWithSubs = mainCategories.map { mainCategory ->
-                    // Alt kategori listelerini bul (type = "List" olanlar)
                     val subLists = menuItems.filter {
                         it.parentMenuId == mainCategory.id && it.type == "List"
                     }
 
-                    // Her bir liste için alt öğeleri bul
                     val subCategories = subLists.map { list ->
                         SubCategory(
                             list = MenuCategory(

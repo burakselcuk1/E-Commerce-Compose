@@ -34,8 +34,6 @@ class ProductViewModel @Inject constructor(
                     )
                 ).execute()
 
-                Log.d("ProductViewModel", "Raw Response: ${response.data}")
-
                 val productData = response.data?.categoryV2?.data?.products ?: emptyList()
 
                 _products.value = productData.mapNotNull { product ->
@@ -43,13 +41,12 @@ class ProductViewModel @Inject constructor(
                         Product(
                             id = it.id ?: "",
                             name = it.name ?: "",
-                            price = 0.0, // Fiyat bilgisi sorguda olmadığı için sabit bir değer verdik
+                            price = 0.0,
                             imageUrl = it.pictures?.firstOrNull()?.imageUrl ?: ""
                         )
                     }
                 }
             } catch (e: Exception) {
-                Log.e("ProductViewModel", "Error: ${e.message}", e)
                 _products.value = emptyList()
             } finally {
                 _isLoading.value = false
@@ -61,6 +58,6 @@ class ProductViewModel @Inject constructor(
 data class Product(
     val id: String,
     val name: String,
-    val price: Double, // Fiyat bilgisi sorguda olmadığından varsayılan değer kullanılacak
+    val price: Double,
     val imageUrl: String
 )

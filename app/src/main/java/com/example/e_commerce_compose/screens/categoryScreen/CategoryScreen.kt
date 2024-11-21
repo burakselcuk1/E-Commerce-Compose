@@ -75,7 +75,7 @@ fun CategoryScreen(
                         onCategoryClick = {
                             onCategoryClick(categoryWithSubs.category.id.toString())
                         },
-                        viewModel = viewModel // ViewModel'i gönderiyoruz
+                        viewModel = viewModel
                     )
                 }
             }
@@ -94,16 +94,13 @@ fun MainCategoryItem(
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     ) {
-        // Ana kategori başlığı
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable {
                     if (categoryWithSubs.subcategories.isEmpty()) {
-                        // Alt kategorisi yoksa ürünlere git
                         onCategoryClick()
                     } else {
-                        // Alt kategorisi varsa açılır menüyü kontrol et
                         viewModel.onCategoryClick(categoryWithSubs.category.id)
                     }
                 }

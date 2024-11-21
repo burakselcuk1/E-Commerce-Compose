@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">E-Commerce-Compose</string>
+    <string name="products_title">Ürünler</string>
 </resources>

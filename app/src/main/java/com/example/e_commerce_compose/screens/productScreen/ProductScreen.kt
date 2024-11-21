@@ -49,7 +49,8 @@ fun ProductScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Ürünler") },
+                title = { Text("Ürünler") }
+                ,
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
