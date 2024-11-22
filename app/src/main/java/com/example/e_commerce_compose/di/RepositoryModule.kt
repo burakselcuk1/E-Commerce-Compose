@@ -3,12 +3,16 @@ package com.example.e_commerce_compose.di
 import com.apollographql.apollo3.ApolloClient
 import com.example.e_commerce_compose.network.service.GraphQLService
 import com.example.e_commerce_compose.repository.CategoryRepository
+import com.example.e_commerce_compose.repository.ProductDetailRepository
 import com.example.e_commerce_compose.repository.ProductRepository
 import com.example.e_commerce_compose.repository.repositoryImpl.CategoryRepositoryImpl
+import com.example.e_commerce_compose.repository.repositoryImpl.ProductDetailRepositoryImpl
 import com.example.e_commerce_compose.repository.repositoryImpl.ProductRepositoryImpl
 import com.example.e_commerce_compose.screens.categoryScreen.CategoriesUseCase
 import com.example.e_commerce_compose.screens.categoryScreen.CategoryUiMapper
 import com.example.e_commerce_compose.screens.mainScreen.MainScreenUseCase
+import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailUseCase
+import com.example.e_commerce_compose.screens.productDetailScreen.model.ProductDetailUiMapper
 import com.example.e_commerce_compose.screens.productScreen.ProductsUseCase
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiMapper
 import dagger.Module
@@ -48,6 +52,23 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideProductDetailRepository(
+        graphQLService: ApolloClient,
+        uiMapper: ProductDetailUiMapper
+    ): ProductDetailRepository {
+        return ProductDetailRepositoryImpl(graphQLService,uiMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductDetailUseCase(
+        repository: ProductDetailRepository
+    ): ProductDetailUseCase {
+        return ProductDetailUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
     fun provideGetProductsByCategoryUseCase(
         repository: ProductRepository
     ): MainScreenUseCase {
@@ -81,5 +102,11 @@ object RepositoryModule {
     @Singleton
     fun productCategoryUiMapper(): CategoryUiMapper {
         return CategoryUiMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun productDetailUiMapper(): ProductDetailUiMapper {
+        return ProductDetailUiMapper()
     }
 }
