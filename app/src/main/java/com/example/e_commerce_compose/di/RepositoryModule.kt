@@ -3,14 +3,17 @@ package com.example.e_commerce_compose.di
 import com.apollographql.apollo3.ApolloClient
 import com.example.e_commerce_compose.network.service.GraphQLService
 import com.example.e_commerce_compose.repository.CategoryRepository
+import com.example.e_commerce_compose.repository.HomeRepository
 import com.example.e_commerce_compose.repository.ProductDetailRepository
 import com.example.e_commerce_compose.repository.ProductRepository
 import com.example.e_commerce_compose.repository.repositoryImpl.CategoryRepositoryImpl
+import com.example.e_commerce_compose.repository.repositoryImpl.HomeRepositoryImpl
 import com.example.e_commerce_compose.repository.repositoryImpl.ProductDetailRepositoryImpl
 import com.example.e_commerce_compose.repository.repositoryImpl.ProductRepositoryImpl
 import com.example.e_commerce_compose.screens.categoryScreen.CategoriesUseCase
 import com.example.e_commerce_compose.screens.categoryScreen.CategoryUiMapper
-import com.example.e_commerce_compose.screens.mainScreen.MainScreenUseCase
+import com.example.e_commerce_compose.screens.mainScreen.HomeScreenUseCase
+import com.example.e_commerce_compose.screens.mainScreen.model.HomeUiMapper
 import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailUseCase
 import com.example.e_commerce_compose.screens.productDetailScreen.model.ProductDetailUiMapper
 import com.example.e_commerce_compose.screens.productScreen.ProductsUseCase
@@ -61,6 +64,15 @@ object RepositoryModule {
 
     @Provides
     @Singleton
+    fun provideHomeRepository(
+        graphQLService: ApolloClient,
+        uiMapper: HomeUiMapper
+    ): HomeRepository {
+        return HomeRepositoryImpl(graphQLService,uiMapper)
+    }
+
+    @Provides
+    @Singleton
     fun provideProductDetailUseCase(
         repository: ProductDetailRepository
     ): ProductDetailUseCase {
@@ -69,10 +81,10 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideGetProductsByCategoryUseCase(
-        repository: ProductRepository
-    ): MainScreenUseCase {
-        return MainScreenUseCase(repository)
+    fun provideHomeUseCase(
+        repository: HomeRepository
+    ): HomeScreenUseCase {
+        return HomeScreenUseCase(repository)
     }
 
     @Provides
@@ -108,5 +120,11 @@ object RepositoryModule {
     @Singleton
     fun productDetailUiMapper(): ProductDetailUiMapper {
         return ProductDetailUiMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun productHomeUiMapper(): HomeUiMapper {
+        return HomeUiMapper()
     }
 }

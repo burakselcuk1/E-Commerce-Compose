@@ -25,6 +25,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.e_commerce_compose.screens.mainScreen.HomeScreen
 import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailScreen
 import com.example.e_commerce_compose.screens.productScreen.ProductScreen
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
@@ -117,7 +118,12 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(BottomNavItem.Home.route) {
-                HomeScreen(Modifier)
+
+                HomeScreen(
+                    onProductClick = { productId ->
+                        navController.navigate("productDetail/$productId")
+                    }
+                )
             }
 
             composable(BottomNavItem.Category.route) {
@@ -175,10 +181,6 @@ fun MainScreen() {
     }
 }
 
-@Composable
-fun HomeScreen(modifier: Modifier) {
-    Text("Anasayfa", modifier = modifier)
-}
 
 @Composable
 fun FavoritesScreen(modifier: Modifier) {
