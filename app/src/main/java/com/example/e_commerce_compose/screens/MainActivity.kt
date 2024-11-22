@@ -25,6 +25,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.e_commerce_compose.screens.accountScreen.AccountScreen
+import com.example.e_commerce_compose.screens.cartScreen.CartScreen
+import com.example.e_commerce_compose.screens.favoriteScreen.FavoritesScreen
 import com.example.e_commerce_compose.screens.mainScreen.HomeScreen
 import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailScreen
 import com.example.e_commerce_compose.screens.productScreen.ProductScreen
@@ -179,22 +182,6 @@ fun MainScreen() {
 
         }
     }
-}
-
-
-@Composable
-fun FavoritesScreen(modifier: Modifier) {
-    Text("Favoriler", modifier = modifier)
-}
-
-@Composable
-fun CartScreen(modifier: Modifier) {
-    Text("Sepetim", modifier = modifier)
-}
-
-@Composable
-fun AccountScreen(modifier: Modifier) {
-    Text("Hesabım", modifier = modifier)
 }
 
 @Preview(showBackground = true)
