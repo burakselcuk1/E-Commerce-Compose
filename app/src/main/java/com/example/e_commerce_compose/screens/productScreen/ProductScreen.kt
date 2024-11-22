@@ -32,6 +32,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.res.painterResource
+import coil.compose.AsyncImage
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,13 +124,15 @@ fun ProductCard(
     ) {
         Column {
             Box {
-                Image(
-                    painter = rememberAsyncImagePainter(product.imageUrl),
+                AsyncImage(
+                    model = product.imageUrl,
                     contentDescription = product.name,
                     modifier = Modifier
                         .fillMaxWidth()
                         .aspectRatio(0.8f),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    placeholder = painterResource(id = android.R.drawable.ic_menu_gallery),
+                    error = painterResource(id = android.R.drawable.ic_menu_gallery)
                 )
                 IconButton(
                     onClick = { /* Favori işlemi */ },
