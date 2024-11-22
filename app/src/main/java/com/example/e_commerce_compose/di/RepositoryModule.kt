@@ -7,6 +7,7 @@ import com.example.e_commerce_compose.repository.ProductRepository
 import com.example.e_commerce_compose.repository.repositoryImpl.CategoryRepositoryImpl
 import com.example.e_commerce_compose.repository.repositoryImpl.ProductRepositoryImpl
 import com.example.e_commerce_compose.screens.categoryScreen.CategoriesUseCase
+import com.example.e_commerce_compose.screens.categoryScreen.CategoryUiMapper
 import com.example.e_commerce_compose.screens.mainScreen.MainScreenUseCase
 import com.example.e_commerce_compose.screens.productScreen.ProductsUseCase
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiMapper
@@ -39,9 +40,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideCategoryRepository(
-        graphQLService: GraphQLService
+        graphQLService: ApolloClient,
+        uiMapper: CategoryUiMapper
     ): CategoryRepository {
-        return CategoryRepositoryImpl(graphQLService)
+        return CategoryRepositoryImpl(graphQLService,uiMapper)
     }
 
     @Provides
@@ -73,5 +75,11 @@ object RepositoryModule {
     @Singleton
     fun productUiMapper(): ProductUiMapper {
         return ProductUiMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun productCategoryUiMapper(): CategoryUiMapper {
+        return CategoryUiMapper()
     }
 }
