@@ -6,6 +6,6 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun CartScreen(modifier: Modifier) {
-    Text("Sepetim", modifier = modifier)
+fun CartScreen() {
+    Text("Sepetim")
 }

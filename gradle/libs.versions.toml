@@ -19,6 +19,8 @@ datastore = "1.0.0"
 material_version = "1.4.0"
 lifecycle_version = "2.6.0"
 apollo = "3.7.3"
+appcompat = "1.6.1"
+material = "1.10.0"
 
 
 [libraries]
@@ -53,6 +55,8 @@ androidx-material = { group = "androidx.compose.material", name = "material", ve
 lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle_version" }
 apollo-runtime = { group = "com.apollographql.apollo3", name = "apollo-runtime", version.ref = "apollo" }
 apollo-normalized-cache = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache", version.ref = "apollo" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -60,5 +64,6 @@ jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = 
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 apollo = { id = "com.apollographql.apollo3", version.ref = "apollo" }
+android-library = { id = "com.android.library", version.ref = "agp" }
 
 

@@ -6,6 +6,6 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun AccountScreen(modifier: Modifier) {
-    Text("Hesabım", modifier = modifier)
+fun AccountScreen() {
+    Text("Hesabım")
 }
