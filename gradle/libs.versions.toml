@@ -21,6 +21,7 @@ lifecycle_version = "2.6.0"
 apollo = "3.7.3"
 appcompat = "1.6.1"
 material = "1.10.0"
+chucker = "4.0.0"
 
 
 [libraries]
@@ -57,6 +58,8 @@ apollo-runtime = { group = "com.apollographql.apollo3", name = "apollo-runtime",
 apollo-normalized-cache = { group = "com.apollographql.apollo3", name = "apollo-normalized-cache", version.ref = "apollo" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+chucker-debug = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
+chucker-release = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

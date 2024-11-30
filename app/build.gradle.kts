@@ -114,4 +114,9 @@ dependencies {
     // Apollo
     implementation(libs.apollo.runtime)
     implementation(libs.apollo.normalized.cache)
+
+    // Chucker
+    debugImplementation(libs.chucker.debug)
+    releaseImplementation(libs.chucker.release)
+
 }

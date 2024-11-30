@@ -6,6 +6,7 @@ import dagger.hilt.components.SingletonComponent
 import android.content.Context
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.network.okHttpClient
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Provides
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.OkHttpClient
@@ -33,7 +34,7 @@ object NetworkModule {
     }
     @Provides
     @Singleton
-    fun provideApolloClient(): ApolloClient {
+    fun provideApolloClient(@ApplicationContext context: Context): ApolloClient {
         val okHttpClient = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
@@ -43,6 +44,11 @@ object NetworkModule {
                     .addHeader("Content-Type", "application/json")
                     .build()
                 chain.proceed(request)
+            }
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(ChuckerInterceptor.Builder(context).build())
+                }
             }
             .build()
 
@@ -55,12 +61,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
+    fun provideRetrofit(@ApplicationContext context: Context, client: OkHttpClient): Retrofit {
+        val okHttpClient = client.newBuilder()
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(ChuckerInterceptor.Builder(context).build())
+                }
+            }
+            .build()
+
         return Retrofit.Builder()
-            .baseUrl((BuildConfig.BASE_URL))
-            .client(client)
+            .baseUrl(BuildConfig.BASE_URL)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
 }
