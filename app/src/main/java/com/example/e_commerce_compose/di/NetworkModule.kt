@@ -39,7 +39,6 @@ object NetworkModule {
             .addInterceptor { chain ->
                 val request = chain.request().newBuilder()
                     .addHeader("culture", "tr-TR")
-                    .addHeader("app-id", "com.example.e_commerce_compose.di")
                     .addHeader("language", "tr")
                     .addHeader("Content-Type", "application/json")
                     .build()
@@ -53,7 +52,7 @@ object NetworkModule {
             .build()
 
         return ApolloClient.Builder()
-            .serverUrl(BuildConfig.BASE_URL) // GraphQL endpoint
+            .serverUrl(BuildConfig.BASE_URL)
             .okHttpClient(okHttpClient)
             .build()
     }
