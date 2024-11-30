@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">E-Commerce-Compose</string>
     <string name="products_title">Ürünler</string>
+    <string name="account_screen_title">Hesabım</string>
+    <string name="cart_screen_title">Sepetim</string>
+    <string name="favorites_screen_title">Favoriler</string>
 </resources>
