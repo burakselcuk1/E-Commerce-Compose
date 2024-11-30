@@ -11,6 +11,7 @@ query CategoryV2($categoryId: String!, $pageSize: Int!, $pageNumber: Int!) {
         }
     ) {
         isSuccess
+        errorMesssage
         data {
             id
             name

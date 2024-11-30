@@ -5,6 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
@@ -13,9 +15,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.e_commerce_compose.common.AppNavGraph
@@ -43,8 +47,12 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    mainViewModel: MainActivityViewModel = hiltViewModel()
+) {
+    val isLoading by mainViewModel.isLoading.collectAsState()
     val navController = rememberNavController()
     val selectedTab = remember { mutableStateOf(0) }
 
@@ -56,17 +64,35 @@ fun MainScreen() {
         BottomNavItem.Account
     )
 
-    Scaffold(
-        bottomBar = {
-            BottomNavBar(navController, bottomNavItems, selectedTab)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Scaffold(
+            bottomBar = {
+                BottomNavBar(navController, bottomNavItems, selectedTab)
+            }
+        ) { innerPadding ->
+            AppNavGraph(
+                navController = navController,
+                modifier = Modifier.padding(innerPadding)
+            )
         }
-    ) { innerPadding ->
-        AppNavGraph(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding)
-        )
-    }
 
+        if (isLoading) {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = MaterialTheme.colorScheme.surface.copy(alpha = 0.7f)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
+            }
+        }
+    }
 }
 
 
@@ -93,7 +119,7 @@ fun BottomNavBar(
                     }
                 },
                 icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
-                label = { Text(text = item.title,style = MaterialTheme.typography.bodySmall) },
+                label = { Text(text = item.title, style = MaterialTheme.typography.bodySmall) },
                 selectedContentColor = MaterialTheme.colorScheme.primary,
                 unselectedContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )

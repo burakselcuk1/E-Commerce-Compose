@@ -43,12 +43,11 @@ fun HomeScreen(
     onProductClick: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect("9") {
-        viewModel.fetchProducts("9")
+    LaunchedEffect("0546546542319") {
+        viewModel.fetchProducts("0546546542319")
     }
 
     val products by viewModel.products.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
 
     Scaffold(
         topBar = {
@@ -78,23 +77,20 @@ fun HomeScreen(
                 }
 
                 item(span = { GridItemSpan(2) }) {
-                    if (isLoading) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(16.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator()
                         }
-                    }
                 }
 
                 // Load more trigger
                 item(span = { GridItemSpan(2) }) {
                     LaunchedEffect(products.size) {
-                        if (products.isNotEmpty() && !isLoading) {
-                            viewModel.fetchProducts("9", isInitialLoad = false)
+                        if (products.isNotEmpty()) {
+                            viewModel.fetchProducts("0546546542319", isInitialLoad = false)
                         }
                     }
                 }
