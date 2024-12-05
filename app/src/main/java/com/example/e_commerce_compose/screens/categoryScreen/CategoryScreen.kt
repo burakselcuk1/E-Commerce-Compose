@@ -32,16 +32,13 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.e_commerce_compose.screens.categoryScreen.CategoryViewModel
 import com.example.e_commerce_compose.screens.categoryScreen.model.CategoryWithSubCategories
-
 @Composable
 fun CategoryScreen(
     modifier: Modifier = Modifier,
     viewModel: CategoryViewModel = hiltViewModel(),
     onCategoryClick: (String) -> Unit
 ) {
-    val categories by viewModel.categories.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val expandedCategoryId by viewModel.expandedCategoryId.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = true) {
         viewModel.fetchCategories()
@@ -52,27 +49,47 @@ fun CategoryScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.CenterHorizontally)
-            )
-        } else {
-            Text(
-                text = "KATEGORİLER",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
-
-            LazyColumn {
-                items(categories) { categoryWithSubs ->
-                    MainCategoryItem(
-                        categoryWithSubs = categoryWithSubs,
-                        isExpanded = categoryWithSubs.category.id == expandedCategoryId,
-                        onCategoryClick = {
-                            onCategoryClick(categoryWithSubs.category.id.toString())
-                        },
-                        viewModel = viewModel
+        when {
+            uiState.isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+            uiState.errorMessage != null -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = uiState.errorMessage ?: "An error occurred",
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodyLarge
                     )
+                }
+            }
+            !uiState.categories.isNullOrEmpty() -> {
+                Text(
+                    text = "KATEGORİLER",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                LazyColumn {
+                    items(uiState.categories!!) { categoryWithSubs ->
+                        MainCategoryItem(
+                            categoryWithSubs = categoryWithSubs,
+                            isExpanded = categoryWithSubs.category.id == uiState.expandedCategoryId,
+                            onCategoryClick = {
+                                onCategoryClick(categoryWithSubs.category.id.toString())
+                            },
+                            onExpandClick = {
+                                viewModel.onCategoryClick(categoryWithSubs.category.id)
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -84,7 +101,7 @@ fun MainCategoryItem(
     categoryWithSubs: CategoryWithSubCategories,
     isExpanded: Boolean,
     onCategoryClick: () -> Unit,
-    viewModel: CategoryViewModel
+    onExpandClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -98,7 +115,7 @@ fun MainCategoryItem(
                     if (categoryWithSubs.subcategories.isEmpty()) {
                         onCategoryClick()
                     } else {
-                        viewModel.onCategoryClick(categoryWithSubs.category.id)
+                        onExpandClick()
                     }
                 }
                 .padding(vertical = 12.dp),
@@ -109,12 +126,12 @@ fun MainCategoryItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                if (categoryWithSubs.category.icon.isNotEmpty() &&
+                if (categoryWithSubs.category.icon?.isNotEmpty() == true &&
                     !categoryWithSubs.category.icon.startsWith("SubList")
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("${"hhttps://hcapi-cdn.sch.awstest.hebiar.com/rest"}/${categoryWithSubs.category.icon}")
+                            .data("https://hcapi-cdn.sch.awstest.hebiar.com/rest/${categoryWithSubs.category.icon}")
                             .crossfade(true)
                             .build(),
                         contentDescription = categoryWithSubs.category.name,
