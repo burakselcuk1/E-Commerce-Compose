@@ -114,7 +114,7 @@ fun MainCategoryItem(
                 ) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data("${"hcapi.sch.awstest.hebiar.com/images"}/${categoryWithSubs.category.icon}")
+                            .data("${"hhttps://hcapi-cdn.sch.awstest.hebiar.com/rest"}/${categoryWithSubs.category.icon}")
                             .crossfade(true)
                             .build(),
                         contentDescription = categoryWithSubs.category.name,

@@ -12,8 +12,8 @@ import com.example.e_commerce_compose.repository.repositoryImpl.ProductDetailRep
 import com.example.e_commerce_compose.repository.repositoryImpl.ProductRepositoryImpl
 import com.example.e_commerce_compose.screens.categoryScreen.CategoriesUseCase
 import com.example.e_commerce_compose.screens.categoryScreen.CategoryUiMapper
-import com.example.e_commerce_compose.screens.mainScreen.HomeScreenUseCase
-import com.example.e_commerce_compose.screens.mainScreen.model.HomeUiMapper
+import com.example.e_commerce_compose.screens.homeScreen.HomeScreenUseCase
+import com.example.e_commerce_compose.screens.homeScreen.model.HomeUiMapper
 import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailUseCase
 import com.example.e_commerce_compose.screens.productDetailScreen.model.ProductDetailUiMapper
 import com.example.e_commerce_compose.screens.productScreen.ProductsUseCase

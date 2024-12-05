@@ -1,24 +1,16 @@
-package com.example.e_commerce_compose.screens.mainScreen
+package com.example.e_commerce_compose.screens.homeScreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -32,9 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.e_commerce_compose.network.model.response.Product
 import com.example.e_commerce_compose.screens.productScreen.ProductCard
-import com.example.e_commerce_compose.screens.productScreen.ProductViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,8 +33,8 @@ fun HomeScreen(
     onProductClick: (String) -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
-    LaunchedEffect("0546546542319") {
-        viewModel.fetchProducts("0546546542319")
+    LaunchedEffect("") {
+        viewModel.fetchProducts("9")
     }
 
     val products by viewModel.products.collectAsState()
@@ -90,7 +80,7 @@ fun HomeScreen(
                 item(span = { GridItemSpan(2) }) {
                     LaunchedEffect(products.size) {
                         if (products.isNotEmpty()) {
-                            viewModel.fetchProducts("0546546542319", isInitialLoad = false)
+                            viewModel.fetchProducts("9", isInitialLoad = false)
                         }
                     }
                 }

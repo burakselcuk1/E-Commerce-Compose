@@ -3,9 +3,7 @@ package com.example.e_commerce_compose.repository.repositoryImpl
 import com.apollographql.apollo3.ApolloClient
 import com.example.CategoryV2Query
 import com.example.e_commerce_compose.repository.HomeRepository
-import com.example.e_commerce_compose.repository.ProductRepository
-import com.example.e_commerce_compose.screens.mainScreen.model.HomeUiMapper
-import com.example.e_commerce_compose.screens.productScreen.model.ProductUiMapper
+import com.example.e_commerce_compose.screens.homeScreen.model.HomeUiMapper
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
 import javax.inject.Inject
 

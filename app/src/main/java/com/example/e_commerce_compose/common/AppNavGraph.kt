@@ -13,7 +13,7 @@ import com.example.e_commerce_compose.screens.*
 import com.example.e_commerce_compose.screens.accountScreen.AccountScreen
 import com.example.e_commerce_compose.screens.cartScreen.CartScreen
 import com.example.e_commerce_compose.screens.favoriteScreen.FavoritesScreen
-import com.example.e_commerce_compose.screens.mainScreen.HomeScreen
+import com.example.e_commerce_compose.screens.homeScreen.HomeScreen
 import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailScreen
 import com.example.e_commerce_compose.screens.productScreen.ProductScreen
 

@@ -1,4 +1,4 @@
-package com.example.e_commerce_compose.screens.mainScreen.model
+package com.example.e_commerce_compose.screens.homeScreen.model
 
 import com.example.CategoryV2Query
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel

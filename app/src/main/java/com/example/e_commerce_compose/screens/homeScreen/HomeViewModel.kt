@@ -1,19 +1,12 @@
-package com.example.e_commerce_compose.screens.mainScreen
+package com.example.e_commerce_compose.screens.homeScreen
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.BaseViewModel
-import com.example.e_commerce_compose.network.model.response.Product
-import com.example.e_commerce_compose.screens.productScreen.ProductsUseCase
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
