@@ -1,6 +1,5 @@
 package com.example.e_commerce_compose.screens
 
-import CategoryScreen
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,18 +21,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.e_commerce_compose.common.AppNavGraph
+import com.example.e_commerce_compose.navigation.AppNavGraph
+import com.example.e_commerce_compose.navigation.BottomNavItem
 import com.example.e_commerce_compose.ui.theme.ECommerceComposeTheme
 import dagger.hilt.android.AndroidEntryPoint
-
-// Bottom Navigation Items
-sealed class BottomNavItem(val route: String, val title: String, val icon: ImageVector) {
-    object Home : BottomNavItem("home", "Anasayfa", Icons.Default.Home)
-    object Category : BottomNavItem("category", "Kategori", Icons.Default.List)
-    object Favorites : BottomNavItem("favorites", "Favoriler", Icons.Default.Favorite)
-    object Cart : BottomNavItem("cart", "Sepetim", Icons.Default.ShoppingCart)
-    object Account : BottomNavItem("account", "Hesabım", Icons.Default.Person)
-}
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

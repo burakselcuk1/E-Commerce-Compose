@@ -1,4 +1,4 @@
-package com.example.e_commerce_compose.common
+package com.example.e_commerce_compose.navigation
 
 
 import CategoryScreen
