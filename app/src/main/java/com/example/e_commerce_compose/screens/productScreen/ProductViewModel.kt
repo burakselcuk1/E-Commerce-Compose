@@ -2,6 +2,7 @@ package com.example.e_commerce_compose.screens.productScreen
 
 import androidx.lifecycle.viewModelScope
 import com.example.core.BaseViewModel
+import com.example.core.LoadingManager
 import com.example.e_commerce_compose.screens.productScreen.model.ProductUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,8 +12,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val fetchProductsUseCase: ProductsUseCase
-) : BaseViewModel() {
+    private val fetchProductsUseCase: ProductsUseCase,
+    loadingManager: LoadingManager
+) : BaseViewModel(loadingManager) {
 
     private val _products = MutableStateFlow<List<ProductUiModel>>(emptyList())
     val products: StateFlow<List<ProductUiModel>> = _products.asStateFlow()

@@ -1,18 +1,19 @@
 package com.example.core
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-open class BaseViewModel : ViewModel() {
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+open class BaseViewModel @Inject constructor(
+    private val loadingManager: LoadingManager
+) : ViewModel() {
+
+    val isLoading: StateFlow<Boolean> = loadingManager.isLoading
 
     protected fun setLoading(loading: Boolean) {
-        _isLoading.value = loading
+        loadingManager.setLoading(loading)
     }
 
     protected fun <T> launchWithLoading(

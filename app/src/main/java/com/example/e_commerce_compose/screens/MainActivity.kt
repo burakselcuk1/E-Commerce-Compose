@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.e_commerce_compose.navigation.AppNavGraph
 import com.example.e_commerce_compose.navigation.BottomNavItem
@@ -38,14 +39,17 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
 @Composable
 fun MainScreen(
     mainViewModel: MainActivityViewModel = hiltViewModel()
 ) {
     val isLoading by mainViewModel.isLoading.collectAsState()
     val navController = rememberNavController()
-    val selectedTab = remember { mutableStateOf(0) }
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    val showBottomBar = currentRoute != "splash"
 
     val bottomNavItems = listOf(
         BottomNavItem.Home,
@@ -58,7 +62,9 @@ fun MainScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Scaffold(
             bottomBar = {
-                BottomNavBar(navController, bottomNavItems, selectedTab)
+                if (showBottomBar) {
+                    BottomNavBar(navController, bottomNavItems, selectedTab = remember { mutableStateOf(0) })
+                }
             }
         ) { innerPadding ->
             AppNavGraph(
@@ -76,10 +82,7 @@ fun MainScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                    )
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
                 }
             }
         }

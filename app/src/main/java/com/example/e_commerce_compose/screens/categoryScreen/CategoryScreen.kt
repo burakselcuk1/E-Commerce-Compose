@@ -50,14 +50,6 @@ fun CategoryScreen(
             .padding(16.dp)
     ) {
         when {
-            uiState.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
             uiState.errorMessage != null -> {
                 Box(
                     modifier = Modifier.fillMaxSize(),
