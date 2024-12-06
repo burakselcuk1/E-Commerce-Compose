@@ -16,6 +16,7 @@ import com.example.e_commerce_compose.screens.favoriteScreen.FavoritesScreen
 import com.example.e_commerce_compose.screens.homeScreen.HomeScreen
 import com.example.e_commerce_compose.screens.productDetailScreen.ProductDetailScreen
 import com.example.e_commerce_compose.screens.productScreen.ProductScreen
+import com.example.e_commerce_compose.screens.splash.SplashScreen
 
 @Composable
 fun AppNavGraph(
@@ -24,9 +25,18 @@ fun AppNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = BottomNavItem.Home.route,
+        startDestination = "splash",
         modifier = modifier
     ) {
+        composable("splash") {
+            SplashScreen(
+                onNavigateToHome = {
+                    navController.navigate(BottomNavItem.Home.route) {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(BottomNavItem.Home.route) {
             HomeScreen(
                 onProductClick = { productId ->
