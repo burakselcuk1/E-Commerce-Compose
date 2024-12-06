@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.apollo)
     id("org.jetbrains.kotlin.kapt")
 }
+
 apollo {
     service("service") {
         packageName.set("com.example")
@@ -32,6 +33,21 @@ android {
         }
     }
 
+    flavorDimensions += "environment"
+    productFlavors {
+        create("development") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"hhttps://hcapi.sch.awstest.hebiar.com/graphql\"")
+        }
+        create("staging") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"https://staging.example.com/graphql\"")
+        }
+        create("production") {
+            dimension = "environment"
+            buildConfigField("String", "BASE_URL", "\"https://production.example.com/graphql\"")
+        }
+    }
 
     buildTypes {
         debug {
@@ -89,7 +105,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
 
     // Retrofit
     implementation(libs.retrofit)
